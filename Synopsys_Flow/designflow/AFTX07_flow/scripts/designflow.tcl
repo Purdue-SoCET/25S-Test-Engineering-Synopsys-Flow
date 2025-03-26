@@ -115,7 +115,8 @@ set_dft_signal -view existing -type Reset \
 
 create_test_protocol
 dft_drc
-preview_dft
+preview_dft 
+##error
 insert_dft
 return
 
