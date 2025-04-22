@@ -76,6 +76,9 @@ initialize_floorplan  \
 # logic_opto stage
 compile_fusion -from logic_opto -to logic_opto
 save_block -as after_logic_opto
+# DFT signals
+set_dft_signal -view existing_dft -type ScanClock -port clk    -timing [list 45 55]
+set_dft_signal -view existing_dft -type Reset     -port n_rst -active_state 0
 
 # scan_insertion goes here
 create_port -direction in scandata_in1
@@ -102,23 +105,14 @@ set_dft_signal -view spec -type ScanDataout -port scandata_out4
 set_dft_signal -view spec -type ScanEnable -port scandata_enable
 
 set_scan_configuration -chain_count 4
-set_dft_signal -type ScanClock -port clk
-
-set_dft_signal -view existing -type ScanClock \
-   -port ATEclk -timing [list 45 55]
-
-## might have to change if Design flow team says they have slow frequency clock (ATE) clk->"name"
-
-set_dft_signal -view existing -type Reset \
-   -port reset_n -active_state 0
-## active states resets and sets
+set_app_options -name dft.insertion_post_logic_opto -value true
 
 create_test_protocol
 dft_drc
 preview_dft 
 ##error
 insert_dft
-return
+write_test_protocol -output uart.spf
 
 # initial_place stage
 compile_fusion -from initial_place -to initial_place
@@ -138,7 +132,7 @@ check_legality
 save_block -as final_opto
 # write_output
 write_verilog -hierarchy design ${DESIGN_NAME}.v
-
+write_test_protocol -output uart_scan.spf
 source -echo /home/asicfab/a/socet238/Synopsys_Flow/designflow/AFTX07_flow/scripts/clock_constraint.tcl
 # List the stages of clock_opt command
 clock_opt -list_only
