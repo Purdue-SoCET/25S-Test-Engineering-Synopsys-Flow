@@ -109,7 +109,8 @@ set_app_options -name dft.insertion_post_logic_opto -value true
 
 create_test_protocol
 dft_drc
-preview_dft
+preview_dft 
+##error
 insert_dft
 write_test_protocol -output uart.spf
 
