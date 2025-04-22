@@ -176,9 +176,3 @@ check_lvs
 save_block -as after_route_opt
 report_qor
 
-## Here goes ATPG part // gotta update to Github
-dft_drc -coverage_estimate -test_mode Internal_scan 
-dft_drc -coverage_estimate -test_mode ScanCompression_mode 
-# For ATPG: 
-write_test_protocol -output scan_compressed.spf -test_mode ScanCompression_mode 
-write_test_protocol -output scan_internal.spf -test_mode Internal_scan
